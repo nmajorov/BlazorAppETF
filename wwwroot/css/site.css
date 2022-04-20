@@ -1,26 +1,50 @@
-@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+/* Sticky footer styles
+-------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    line-height: 60px; /* Vertically center the text there */
+    background-color: #f5f5f5;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > .container {
+    padding: 60px 15px 0;
+}
+.footer{
+    padding: 0 0;
+}
+.footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
+    
+}
+
+code {
+    font-size: 80%;
+}
 
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Noto Sans', sans-serif;
 }
 
-h1:focus {
-    outline: none;
-}
-
-a, .btn-link {
-    color: #0071c1;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-
-.content {
-    padding-top: 1.1rem;
-}
 
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
@@ -59,6 +83,6 @@ a, .btn-link {
     color: white;
 }
 
-    .blazor-error-boundary::after {
+.blazor-error-boundary::after {
         content: "An error has occurred."
-    }
+}
