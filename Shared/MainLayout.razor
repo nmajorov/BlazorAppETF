@@ -2,21 +2,52 @@
 
 <PageTitle>BlazorAppETF</PageTitle>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<header class="p-3 p-3 mb-3 border-bottom">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <!--
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">
+          Logo
+        </a>
+      -->
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+          <li>
+            <NavLink class="nav-link" href="counter">
+              <span class="oi oi-plus" aria-hidden="true"></span> Counter
+            </NavLink>
+          </li>
+          <li>
+            <NavLink class="nav-link" href="fetchdata">
+              <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+            </NavLink>
+          </li>
+          <li><a href="/About" class="nav-link px-2">About</a></li>
+        </ul>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="/Login">Login</a>
+        <!--
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+          <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+        </form>
+        -->
+
+        <div class="text-end">
+          <button type="button" class="btn btn-outline-primary me-2">Login</button>
+          <button type="button" class="btn btn-warning">Sign-up</button>
         </div>
-        <div class="top-row px-4">
-                    <a href="/About" target="_blank">About</a>
-                </div>
+      </div>
+    </div>
+  </header>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+    <!-- Begin page content -->
+<main role="main" class="container">
+  @Body
+</main>
+
+    <footer class="footer">
+      <div class="container">
+        <span class="text-muted">Copiright 2022</span>
+      </div>
+    </footer>
+
+ 
