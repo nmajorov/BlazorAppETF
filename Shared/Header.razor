@@ -1,4 +1,8 @@
 @inject NavigationManager _nav
+@using Microsoft.AspNetCore.Components.Authorization
+
+
+@inject NavigationManager Navigation
 
 <header class="p-3 p-3 mb-3 border-bottom">
     <div class="container">
@@ -30,9 +34,35 @@
             -->
 
             <div class="text-end">
-                <button type="button" class="btn btn-outline-primary me-2" @onclick="@(()=>_nav.NavigateTo("/Login"))">Login</button>
-                <button type="button" class="btn btn-warning">Sign-up</button>
+                
+                <AuthorizeView>
+                    <Authorized>
+                        <ul>
+                            <li>
+                                Hello, @context.User.Identity?.Name!
+                                <button class="nav-link btn btn-link" @onclick="BeginLogout">Log out</button>
+                            </li>
+                        </ul>
+                       
+                    </Authorized>
+                    <NotAuthorized>
+                        <button type="button" class="btn btn-outline-primary me-2" @onclick="@(() => _nav.NavigateTo("/Login"))">Login</button>
+                        <button type="button" class="btn btn-warning">Sign-up</button>
+                    </NotAuthorized>
+                </AuthorizeView>
+                
+                
             </div>
         </div>
     </div>
 </header>
+
+@code{
+//add on top    @inject SignOutSessionStateManager SignOutManager
+
+    private async Task BeginLogout(MouseEventArgs args)
+    {
+ //       await SignOutManager.SetSignOutState();
+        _nav.NavigateTo("/");
+    }
+}
