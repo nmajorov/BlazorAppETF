@@ -15,5 +15,5 @@ public interface IDataService
     /// <returns>
     /// The current user from application context
     /// </returns>
-    User CurrentUser { get; set; }
+    User? CurrentUser { get; set; }
 }

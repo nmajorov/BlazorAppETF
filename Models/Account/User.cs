@@ -1,8 +1,9 @@
 namespace BlazorAppETF.Models.Account;
 using Microsoft.AspNetCore.Identity;
-/**
- * model for login page
- */
+
+/// <summary>
+///  User in the application 
+/// </summary>
 public class User : IdentityUser
 {
     public bool RememberMe { get; set; }

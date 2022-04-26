@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using BlazorAppETF.Data;
 using BlazorAppETF.Model;
+using BlazorAppETF.Services;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Console = BootstrapBlazor.Components.Console;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,6 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddBootstrapBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-
 //add Database
 builder.Services.AddDbContext<IdentityDataContext>((options =>
 {
@@ -24,10 +24,20 @@ builder.Services.AddDbContext<IdentityDataContext>((options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityDataContext>();
 
-//builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-//builder.Services.AddTransient<IBeamApiService, BeamApiService>();
-//builder.Services.AddSingleton<IDataService, DataService>();
 
+builder.Services.AddTransient<IAppApiService, AppApiService>();
+builder.Services.AddSingleton<IDataService, DataService>();
+builder.Services.AddScoped<AppAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>
+    (s => s.GetRequiredService<AppAuthenticationStateProvider>());
+//
+// builder.Services.AddHttpClient<AppApiService>(client =>
+// {
+//     client.BaseAddress = new Uri("http://localhost:5120");
+//     
+// });
+builder.Services.AddHttpClient();
+builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri("http://ibm.com      ") });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -39,7 +49,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
+
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

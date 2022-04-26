@@ -7,5 +7,9 @@ namespace BlazorAppETF.Services;
 /// </summary>
 public interface IAppApiService
 {
-    Task<User> GetUser();
+    public void SetBaseUrl(String url);
+    Task<User?> GetUser();
+    Task Login(User login);
+    Task Register(User login);
+    Task Logout();
 }

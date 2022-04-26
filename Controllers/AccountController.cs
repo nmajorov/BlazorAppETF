@@ -34,7 +34,7 @@ namespace BlazorAppETF.Controllers
         public async Task<IActionResult> Login(User login)
         {
             
-            var user = await _userManager.FindByNameAsync(login.UserName);
+            var user = await _userManager.FindByNameAsync(login.Email);
             if (user == null) return BadRequest("User does not exist");
             
             //
