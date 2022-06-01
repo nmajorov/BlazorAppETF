@@ -7,10 +7,12 @@
 @inject NavigationManager navigationManager
 @inject IDataService dataService;
 
-<div>
+<div class="form-signin text-center">
     @foreach (var error in errors)
     {
-        <div class="alert alert-danger" role="alert">@error</div>
+        <div class="row">
+            <div class="alert alert-danger" role="alert">@error</div>
+        </div>
     }
 </div>
 
@@ -48,6 +50,16 @@
     async Task HandleFormSubmit()
     {
         errors.Clear();
+
+        if (string.IsNullOrEmpty(login.UserName)){
+            errors.Add("email must be set");
+            return;
+        }
+         if (string.IsNullOrEmpty(login.PasswordHash)){
+            errors.Add("password must be set");
+            return;
+        }
+
         try
         {
             HttpClient client = new HttpClient();
@@ -65,11 +77,11 @@
             Console.WriteLine(ex);
 
             errors.Add("Verify user name or password");
-            if (!string.IsNullOrEmpty(ex.Message))
-            {
-                errors.Add(ex.Message);
+           // if (!string.IsNullOrEmpty(ex.Message))
+           // {
+           //     errors.Add(ex.Message);
 
-            }
+           // }
         }
     }
 }
