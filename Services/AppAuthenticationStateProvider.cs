@@ -6,11 +6,11 @@ using System.Security.Claims;
 
 public class AppAuthenticationStateProvider :AuthenticationStateProvider
 {
-    private readonly IAppApiService _appApi; 
+
+     
     private readonly IDataService _dataService;
-    public AppAuthenticationStateProvider(IAppApiService appApi, IDataService dataService)
+    public AppAuthenticationStateProvider(IDataService dataService)
     {
-        _appApi = appApi;
         _dataService = dataService;
     }
 
@@ -25,8 +25,11 @@ public class AppAuthenticationStateProvider :AuthenticationStateProvider
 
         var currentUser = _dataService.CurrentUser;
         if (currentUser == null || !currentUser.IsAuthenticated)
-        {
-            _dataService.CurrentUser = await _appApi.GetUser();
+        { 
+            Console.WriteLine("API is Null? {0}",(API !=null) );
+            if (API != null){
+                _dataService.CurrentUser = await API.GetUser();
+            }
             
           currentUser = _dataService.CurrentUser;
         }       
@@ -43,8 +46,10 @@ public class AppAuthenticationStateProvider :AuthenticationStateProvider
     
     public async Task Login(User login)
     {
-        await _appApi.Login(login);
-        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+        if (API != null){
+            await API.Login(login);
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+        }
     }
     
 }

@@ -2,54 +2,74 @@
 @using BootstrapBlazor.Components
 @using BlazorAppETF.Models.Account
 @using BlazorAppETF.Services
-@using Console = BootstrapBlazor.Components.Console
+@using Console = System.Console
 @inject AppAuthenticationStateProvider authStateProvider
 @inject NavigationManager navigationManager
+@inject IDataService dataService;
 
-    
-    <label class="text-danger">@error</label>
-        <EditForm class="form-signin text-center" Model="@login" OnValidSubmit="HandleFormSubmit">
-        
-            <Avatar IsCircle="true" IsIcon="true" Icon="fa fa-user"/>
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+<div>
+    @foreach (var error in errors)
+    {
+        <div class="alert alert-danger" role="alert">@error</div>
+    }
+</div>
 
-            <div class="form-floating">
-                <input type="email" class="form-control" @bind="login.Email" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">Email address</label>
-            </div>
-            <div class="form-floating">
-                <input type="password" class="form-control" @bind="login.PasswordHash"  id="floatingPassword" placeholder="Password">
-                <label for="floatingPassword">Password</label>
-            </div>
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                </label>
-            </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+<EditForm class="form-signin text-center" Model="@login" OnValidSubmit="HandleFormSubmit">
 
-        </EditForm>
+    <Avatar IsCircle="true" IsIcon="true" Icon="fa fa-user" />
+    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
-@code{
-    string error { get; set; }
+    <div class="form-floating">
+        <input type="email" class="form-control" @bind="login.UserName" id="floatingInput"
+            placeholder="name@example.com">
+        <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating">
+        <input type="password" class="form-control" @bind="login.PasswordHash" id="floatingPassword"
+            placeholder="Password">
+        <label for="floatingPassword">Password</label>
+    </div>
+
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" value="remember-me"> Remember me
+        </label>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+
+</EditForm>
+
+@code {
+    List<string> errors = new List<string>();
     private User login = new User();
 
-    
+
     async Task HandleFormSubmit()
     {
-        error = null;
+        errors.Clear();
         try
         {
-            
-            
-            authStateProvider.API.SetBaseUrl(navigationManager.BaseUri);
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(navigationManager.BaseUri);
+
+            AppApiService api = new AppApiService(client);
+
+            authStateProvider.API = api;
+            Console.WriteLine($"Do login for user {login.UserName}");
             await authStateProvider.Login(login);
             navigationManager.NavigateTo("");
         }
         catch (Exception ex)
         {
-            error = ex.Message;
-        }  
+            Console.WriteLine(ex);
+
+            errors.Add("Verify user name or password");
+            if (!string.IsNullOrEmpty(ex.Message))
+            {
+                errors.Add(ex.Message);
+
+            }
+        }
     }
 }

@@ -31,10 +31,14 @@ namespace BlazorAppETF.Controllers
 
        
         [HttpPost]
-        public async Task<IActionResult> Login(User login)
+        public async Task<IActionResult> Login([FromBody]User login)
         {
             
-            var user = await _userManager.FindByNameAsync(login.Email);
+
+            
+            Console.WriteLine($"find first user by name: {login}");
+   
+            var user = await _userManager.FindByNameAsync(login.UserName);
             if (user == null) return BadRequest("User does not exist");
             
             //
@@ -44,9 +48,11 @@ namespace BlazorAppETF.Controllers
             // }
 
             var result = await _signinManager.PasswordSignInAsync(
-                login.Email, login.PasswordHash,
+                login.UserName, login.PasswordHash,
                 login.RememberMe, false
             );
+
+            Console.WriteLine($"singInAsyncResult: {result.Succeeded}");
 
             if(!result.Succeeded)
             {

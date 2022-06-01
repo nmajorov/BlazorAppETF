@@ -17,15 +17,20 @@ public class AppApiService: IAppApiService
         _http.BaseAddress = new Uri(url);
     }
 
-    public Task<User> GetUser(){
-        return _http.GetFromJsonAsync<User>("api/User");
+    public async Task<User> GetUser(){
+        return await  _http.GetFromJsonAsync<User>("api/account/User");
      ;
     }
 
     
     public async Task Login(User login)
     {
-        var resp = await _http.PostAsJsonAsync("api/auth/login", login);
+
+        string serializedString = System.Text.Json.JsonSerializer.Serialize(login);
+        Console.WriteLine($"serialized login: {serializedString}");
+        var content = new StringContent(serializedString, System.Text.Encoding.UTF8, "application/json");
+
+        var resp = await _http.PostAsync("api/account/login", content);
         if (!resp.IsSuccessStatusCode)
             throw new Exception(await resp.Content.ReadAsStringAsync());
     }
