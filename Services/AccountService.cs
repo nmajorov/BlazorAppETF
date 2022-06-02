@@ -32,13 +32,12 @@ namespace BlazorAppETF.Services
         public async Task<String> Login(User login)
         {
             
-
-            
             Console.WriteLine($"find first user by name: {login}");
    
             var user = await _userManager.FindByNameAsync(login.UserName);
-            if (user == null) return "User does not exist";
-            
+            if (user == null) {
+                throw new Exception("user not found");
+            }
             //
             // if(!ModelState.IsValid)
             // {
@@ -54,10 +53,7 @@ namespace BlazorAppETF.Services
 
             if(!result.Succeeded)
             {
-                return "Invalid password";
-
-//                ModelState.AddModelError("", "Login error!");
-  //              return Redirect(returnUrl);
+                throw new Exception ("login unsuccessful");
             }
 
 

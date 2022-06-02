@@ -34,12 +34,14 @@
             placeholder="Password">
         <label for="floatingPassword">Password</label>
     </div>
-
+    <!--
     <div class="checkbox mb-3">
         <label>
             <input type="checkbox" value="remember-me"> Remember me
         </label>
+    
     </div>
+    -->
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
 
 </EditForm>
@@ -64,12 +66,7 @@
 
         try
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(navigationManager.BaseUri);
-
-            AppApiService api = new AppApiService(client);
-
-            authStateProvider.API = api;
+           
             Console.WriteLine($"Do login for user {login.UserName}");
             await authStateProvider.Login(login);
             navigationManager.NavigateTo("");

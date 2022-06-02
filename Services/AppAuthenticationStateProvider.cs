@@ -9,9 +9,12 @@ public class AppAuthenticationStateProvider :AuthenticationStateProvider
 
      
     private readonly IDataService _dataService;
-    public AppAuthenticationStateProvider(IDataService dataService)
+    private readonly AccountService _accountService;
+
+    public AppAuthenticationStateProvider(IDataService dataService,AccountService accountService)
     {
         _dataService = dataService;
+        _accountService =accountService;
     }
 
 
@@ -46,10 +49,10 @@ public class AppAuthenticationStateProvider :AuthenticationStateProvider
     
     public async Task Login(User login)
     {
-        if (API != null){
-            await API.Login(login);
+        
+            await _accountService.Login(login);
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-        }
+        
     }
     
 }
