@@ -25,7 +25,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityDataContext>();
 
 
-builder.Services.AddTransient<IAppApiService, AppApiService>();
 builder.Services.AddSingleton<IDataService, DataService>();
 builder.Services.AddScoped<AppAuthenticationStateProvider>();
 builder.Services.AddScoped<AccountService>();

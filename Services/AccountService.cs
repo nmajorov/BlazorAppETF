@@ -28,7 +28,6 @@ namespace BlazorAppETF.Services
       
 
        
-       
         public async Task Login(User login)
         {
             
@@ -53,6 +52,28 @@ namespace BlazorAppETF.Services
 
 
         }
+
+        public async Task Register(User regUser)
+        {
+            
+            Console.WriteLine($"register  user by name: {regUser.UserName}");
+   
+            var user = await _userManager.FindByNameAsync(regUser.UserName);
+            if (user != null) {
+                throw new UserExistException("user already exist");
+            }
+          
+            //user name same as password
+            regUser.Email = regUser.UserName;
+
+             var result = await _userManager.CreateAsync(regUser,regUser.PasswordHash);
+
+            if (!result.Succeeded) new Exception(result.Errors.FirstOrDefault()?.Description);
+            
+            // and login user
+            // await Login(login);
+        }
+
 
         
        

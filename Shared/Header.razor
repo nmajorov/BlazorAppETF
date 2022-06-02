@@ -51,7 +51,7 @@
                     </Authorized>
                     <NotAuthorized>
                         <button type="button" class="btn btn-outline-primary me-2" @onclick="@(() => _nav.NavigateTo("/Login"))">Login</button>
-                        <button type="button" class="btn btn-warning">Sign-up</button>
+                        <button type="button" class="btn btn-warning" @onclick="@(() => _nav.NavigateTo("/register"))">Sign-up</button>
                     </NotAuthorized>
                 </AuthorizeView>
                 

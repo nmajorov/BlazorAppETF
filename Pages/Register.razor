@@ -1,0 +1,86 @@
+@page "/register"
+@using BootstrapBlazor.Components
+@using BlazorAppETF.Models.Account
+@using BlazorAppETF.Services
+@using Console = System.Console
+@inject AppAuthenticationStateProvider authStateProvider
+@inject NavigationManager navigationManager
+@inject IDataService dataService;
+@inject AccountService AccountService;
+
+
+<div class="form-signin text-center">
+    @foreach (var error in errors)
+    {
+        <div class="row">
+            <div class="alert alert-danger" role="alert">@error</div>
+        </div>
+    }
+</div>
+
+
+<EditForm class="form-signin text-center" Model="@login" OnValidSubmit="HandleFormSubmit">
+
+    <Avatar IsCircle="true" IsIcon="true" Icon="fa fa-user" />
+    <h1 class="h3 mb-3 fw-normal">Welcome</h1>
+
+    <div class="form-floating">
+        <input type="email" class="form-control" @bind="login.UserName" id="floatingInput"
+            placeholder="name@example.com">
+        <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating">
+        <input type="password" class="form-control" @bind="login.PasswordHash" id="floatingPassword"
+            placeholder="Password">
+        <label for="floatingPassword">Password</label>
+    </div>
+    <!--
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" value="remember-me"> Remember me
+        </label>
+
+    </div>
+    -->
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Next</button>
+
+</EditForm>
+
+@code {
+    List<string> errors = new List<string>();
+    private User login = new User();
+
+
+    async Task HandleFormSubmit()
+    {
+        errors.Clear();
+
+        if (string.IsNullOrEmpty(login.UserName))
+        {
+            errors.Add("email must be set");
+            return;
+        }
+        if (string.IsNullOrEmpty(login.PasswordHash))
+        {
+            errors.Add("password must be set");
+            return;
+        }
+
+        try
+        {
+
+            Console.WriteLine($"Do register for user {login.UserName}");
+            await authStateProvider.Register(login);
+            navigationManager.NavigateTo("/regdone");
+        }
+        catch (UserExistException ex)
+        {
+            errors.Add(ex.Message);
+        }
+        catch (Exception e)
+        {
+            errors.Add("error");
+            Console.WriteLine(e);
+        }
+    }
+}
