@@ -29,21 +29,16 @@ namespace BlazorAppETF.Services
 
        
        
-        public async Task<String> Login(User login)
+        public async Task Login(User login)
         {
             
             Console.WriteLine($"find first user by name: {login}");
    
             var user = await _userManager.FindByNameAsync(login.UserName);
             if (user == null) {
-                throw new Exception("user not found");
+                throw new UserNotFoundException("user not found");
             }
-            //
-            // if(!ModelState.IsValid)
-            // {
-            //     return Redirect(returnUrl);
-            // }
-
+          
             var result = await _signinManager.PasswordSignInAsync(
                 login.UserName, login.PasswordHash,
                 login.RememberMe, false
@@ -53,11 +48,10 @@ namespace BlazorAppETF.Services
 
             if(!result.Succeeded)
             {
-                throw new Exception ("login unsuccessful");
+                throw new LoginFailException("Verify user name or password");
             }
 
 
-            return "OK";
         }
 
         

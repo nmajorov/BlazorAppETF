@@ -18,10 +18,6 @@ public class AppAuthenticationStateProvider :AuthenticationStateProvider
     }
 
 
-    public IAppApiService API{
-        get;
-        set;
-    }
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var identity = new ClaimsIdentity();
@@ -29,12 +25,7 @@ public class AppAuthenticationStateProvider :AuthenticationStateProvider
         var currentUser = _dataService.CurrentUser;
         if (currentUser == null || !currentUser.IsAuthenticated)
         { 
-            Console.WriteLine("API is Null? {0}",(API !=null) );
-            if (API != null){
-                _dataService.CurrentUser = await API.GetUser();
-            }
-            
-          currentUser = _dataService.CurrentUser;
+            //TODO implement
         }       
         if (currentUser.IsAuthenticated)
         {
@@ -51,6 +42,8 @@ public class AppAuthenticationStateProvider :AuthenticationStateProvider
     {
         
             await _accountService.Login(login);
+            //_dataService.CurrentUser = login;
+
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         
     }

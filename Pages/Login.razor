@@ -39,7 +39,7 @@
         <label>
             <input type="checkbox" value="remember-me"> Remember me
         </label>
-    
+
     </div>
     -->
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
@@ -55,32 +55,36 @@
     {
         errors.Clear();
 
-        if (string.IsNullOrEmpty(login.UserName)){
+        if (string.IsNullOrEmpty(login.UserName))
+        {
             errors.Add("email must be set");
             return;
         }
-         if (string.IsNullOrEmpty(login.PasswordHash)){
+        if (string.IsNullOrEmpty(login.PasswordHash))
+        {
             errors.Add("password must be set");
             return;
         }
 
         try
         {
-           
+
             Console.WriteLine($"Do login for user {login.UserName}");
             await authStateProvider.Login(login);
             navigationManager.NavigateTo("");
         }
-        catch (Exception ex)
+        catch (LoginFailException ex)
         {
-            Console.WriteLine(ex);
-
-            errors.Add("Verify user name or password");
-           // if (!string.IsNullOrEmpty(ex.Message))
-           // {
-           //     errors.Add(ex.Message);
-
-           // }
+            errors.Add(ex.Message);
+        }
+        catch (UserNotFoundException ex)
+        {
+            errors.Add(ex.Message);
+        }
+        catch (Exception e)
+        {
+            errors.Add("error");
+            Console.WriteLine(e);
         }
     }
 }
