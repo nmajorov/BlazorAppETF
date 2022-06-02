@@ -25,19 +25,17 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityDataContext>();
 
 
-builder.Services.AddTransient<IAppApiService, AppApiService>();
+//builder.Services.AddOptions();
+//builder.Services.AddAuthorizationCore();
 builder.Services.AddSingleton<IDataService, DataService>();
+ builder.Services.AddScoped<AuthenticationStateProvider>
+                (s => s.GetRequiredService<AppAuthenticationStateProvider>());
 builder.Services.AddScoped<AppAuthenticationStateProvider>();
-//builder.Services.AddScoped<AuthenticationStateProvider>
-//    (s => s.GetRequiredService<AppAuthenticationStateProvider>());
-//
-// builder.Services.AddHttpClient<AppApiService>(client =>
-// {
-//     client.BaseAddress = new Uri("http://localhost:5120");
-//     
-// });
+builder.Services.AddScoped<AccountService>();
 builder.Services.AddHttpClient();
-//builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri("http://ibm.com      ") });
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

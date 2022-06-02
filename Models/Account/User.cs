@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 /// </summary>
 public class User : IdentityUser
 {
+   
     public bool RememberMe { get; set; }
     public bool IsAuthenticated { get; set; }
     public Dictionary<string, string> Claims { get; set; }
