@@ -25,7 +25,11 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityDataContext>();
 
 
+//builder.Services.AddOptions();
+//builder.Services.AddAuthorizationCore();
 builder.Services.AddSingleton<IDataService, DataService>();
+ builder.Services.AddScoped<AuthenticationStateProvider>
+                (s => s.GetRequiredService<AppAuthenticationStateProvider>());
 builder.Services.AddScoped<AppAuthenticationStateProvider>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddHttpClient();

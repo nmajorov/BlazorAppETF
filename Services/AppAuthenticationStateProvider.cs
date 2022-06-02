@@ -54,5 +54,14 @@ public class AppAuthenticationStateProvider : AuthenticationStateProvider
         await _accountService.Register(model);
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
+
+
+       public async Task Logout()
+        {
+            await _accountService.Logout();
+            _dataService.CurrentUser = null;
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+        }
+
 }
 

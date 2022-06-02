@@ -96,6 +96,12 @@ namespace BlazorAppETF.Services
         }
 
 
+        public async Task Logout()
+        {
+
+            //await _signinManager.SignOutAsync();
+
+        }
 
 
 

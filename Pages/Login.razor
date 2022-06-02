@@ -71,7 +71,7 @@
 
             Console.WriteLine($"Do model for user {model.EmailAddress}");
             await authStateProvider.Login(model);
-            navigationManager.NavigateTo("");
+            navigationManager.NavigateTo("/", true);
         }
         catch (LoginFailException ex)
         {
