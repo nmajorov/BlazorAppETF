@@ -6,6 +6,8 @@
 @inject AppAuthenticationStateProvider authStateProvider
 @inject NavigationManager navigationManager
 @inject IDataService dataService;
+@inject AccountService AccountService;
+
 
 <div class="form-signin text-center">
     @foreach (var error in errors)
