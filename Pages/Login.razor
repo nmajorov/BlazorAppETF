@@ -19,18 +19,18 @@
 </div>
 
 
-<EditForm class="form-signin text-center" Model="@login" OnValidSubmit="HandleFormSubmit">
+<EditForm class="form-signin text-center" Model="@model" OnValidSubmit="HandleFormSubmit">
 
     <Avatar IsCircle="true" IsIcon="true" Icon="fa fa-user" />
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
     <div class="form-floating">
-        <input type="email" class="form-control" @bind="login.UserName" id="floatingInput"
+        <input type="email" class="form-control" @bind="model.EmailAddress" id="floatingInput"
             placeholder="name@example.com">
         <label for="floatingInput">Email address</label>
     </div>
     <div class="form-floating">
-        <input type="password" class="form-control" @bind="login.PasswordHash" id="floatingPassword"
+        <input type="password" class="form-control" @bind="model.Password" id="floatingPassword"
             placeholder="Password">
         <label for="floatingPassword">Password</label>
     </div>
@@ -48,19 +48,19 @@
 
 @code {
     List<string> errors = new List<string>();
-    private User login = new User();
+    private RegisterLoginViewModel model = new RegisterLoginViewModel();
 
 
     async Task HandleFormSubmit()
     {
         errors.Clear();
 
-        if (string.IsNullOrEmpty(login.UserName))
+        if (string.IsNullOrEmpty(model.EmailAddress))
         {
             errors.Add("email must be set");
             return;
         }
-        if (string.IsNullOrEmpty(login.PasswordHash))
+        if (string.IsNullOrEmpty(model.Password))
         {
             errors.Add("password must be set");
             return;
@@ -69,8 +69,8 @@
         try
         {
 
-            Console.WriteLine($"Do login for user {login.UserName}");
-            await authStateProvider.Login(login);
+            Console.WriteLine($"Do model for user {model.EmailAddress}");
+            await authStateProvider.Login(model);
             navigationManager.NavigateTo("");
         }
         catch (LoginFailException ex)

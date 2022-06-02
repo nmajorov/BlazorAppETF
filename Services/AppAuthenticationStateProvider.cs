@@ -26,9 +26,11 @@ public class AppAuthenticationStateProvider : AuthenticationStateProvider
         if (currentUser == null || !currentUser.IsAuthenticated)
         {
             //TODO implement?
-        }else if    <(currentUser.IsAuthenticated)
+        }
+        else if (currentUser.IsAuthenticated)
         {
-            var claims = new[] { new Claim(ClaimTypes.Name, _dataService.CurrentUser.UserName) }.Concat(_dataService.CurrentUser.Claims.Select(c => new Claim(c.Key, c.Value)));
+            var claims = new[] { new Claim(ClaimTypes.Name, currentUser.UserName) }
+                .Concat(currentUser.Claims.Select(c => new Claim(c.Key, c.Value)));
             identity = new ClaimsIdentity(claims, "Server authentication");
         }
         return new AuthenticationState(new ClaimsPrincipal(identity));
@@ -37,19 +39,19 @@ public class AppAuthenticationStateProvider : AuthenticationStateProvider
 
 
 
-    public async Task Login(User login)
+    public async Task Login(RegisterLoginViewModel model)
     {
 
-        await _accountService.Login(login);
-        _dataService.CurrentUser = login;
+        var user = await _accountService.Login(model);
+        _dataService.CurrentUser = user;
 
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 
     }
 
-    public async Task Register(User login)
+    public async Task Register(RegisterLoginViewModel model)
     {
-        await _accountService.Register(login);
+        await _accountService.Register(model);
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 }

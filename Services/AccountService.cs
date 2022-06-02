@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BlazorAppETF.Services
 {
-    public class AccountService 
+    public class AccountService
     {
         private readonly SignInManager<IdentityUser> _signinManager;
         private readonly UserManager<IdentityUser> _userManager;
@@ -25,59 +25,80 @@ namespace BlazorAppETF.Services
             _signinManager = signinManager;
         }
 
-      
 
-       
-        public async Task Login(User login)
+
+
+        public async Task<User> Login(RegisterLoginViewModel login)
         {
-            
+
             Console.WriteLine($"find first user by name: {login}");
-   
-            var user = await _userManager.FindByNameAsync(login.UserName);
-            if (user == null) {
+
+
+
+            var user = await _userManager.FindByNameAsync(login.EmailAddress);
+            if (user == null)
+            {
                 throw new UserNotFoundException("user not found");
             }
-          
-            var result = await _signinManager.PasswordSignInAsync(
-                login.UserName, login.PasswordHash,
-                login.RememberMe, false
+
+
+            var result =  await _signinManager.CheckPasswordSignInAsync(user,
+                login.Password,
+                false
             );
 
             Console.WriteLine($"singInAsyncResult: {result.Succeeded}");
 
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
                 throw new LoginFailException("Verify user name or password");
             }
 
+            //refresh to get last login info
+            user = await _userManager.FindByNameAsync(login.EmailAddress);
+
+            var claims = await _userManager.GetClaimsAsync(user);
+
+            User appUser = new User();
+            appUser.UserName = user.UserName;
+            appUser.Email = user.Email;
+            appUser.Id = user.Id;
+            appUser.IsAuthenticated = true;
+            appUser.Claims = claims.ToDictionary(c => c.Type, c => c.Value);
+
+
+            return appUser;
 
         }
 
-        public async Task Register(User regUser)
+        public async Task Register(RegisterLoginViewModel regUser)
         {
-            
-            Console.WriteLine($"register  user by name: {regUser.UserName}");
-   
-            var user = await _userManager.FindByNameAsync(regUser.UserName);
-            if (user != null) {
+
+            Console.WriteLine($"register  user by name: {regUser.EmailAddress}");
+
+            var user = await _userManager.FindByNameAsync(regUser.EmailAddress);
+            if (user != null)
+            {
                 throw new UserExistException("user already exist");
             }
-          
-            //user name same as password
-            regUser.Email = regUser.UserName;
 
-             var result = await _userManager.CreateAsync(regUser,regUser.PasswordHash);
+            IdentityUser identityUser = new IdentityUser();
+            //user name same as password
+            identityUser.Email = regUser.EmailAddress;
+            identityUser.UserName = regUser.EmailAddress;
+
+            var result = await _userManager.CreateAsync(identityUser, regUser.Password);
 
             if (!result.Succeeded) new Exception(result.Errors.FirstOrDefault()?.Description);
-            
+
             // and login user
             // await Login(login);
         }
 
 
-        
-       
+
+
 
     }
-      
+
 }
