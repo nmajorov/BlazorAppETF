@@ -48,8 +48,9 @@
                                 <Avatar IsCircle="true" IsIcon="true" Icon="fa fa-user" />
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                 <li><a class="dropdown-item" href="#">Dashboard</a> </li>
-                                <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+                                <li>
+                                  <NavLink class="dropdown-item   px-3  nav-link btn btn-link" href="/claims">Show Claims</NavLink>
+                                </li>
                                 <li><button class="dropdown-item px-3  nav-link btn btn-link" @onclick="BeginLogout">Log Out</button></li>
                             </ul>
 
